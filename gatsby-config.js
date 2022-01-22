@@ -4,6 +4,7 @@ module.exports = {
     title: "Happy Days by Basia",
   },
   plugins: [
+    "gatsby-plugin-typescript",
     {
       resolve: "gatsby-source-wordpress",
       options: {
@@ -38,5 +39,6 @@ module.exports = {
       },
       __key: "pages",
     },
+    "gatsby-plugin-postcss",
   ],
 };
