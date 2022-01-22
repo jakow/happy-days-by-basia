@@ -1,11 +1,14 @@
 import * as React from "react"
-import Layout from "../components/layout"
+import Layout from "../components/Layout"
+import bannerimg from "../images/blogimg1.jpg";
 
-// markup
-export default function IndexPage() {
+
+export default function IndexPage(): React.ReactElement {
   return (
     <Layout>
-      <p>Welcome!</p>
+      <div className="px-4 py-2">
+        <img className="w-full" src={bannerimg} />
+      </div>
     </Layout>
   );
 }
