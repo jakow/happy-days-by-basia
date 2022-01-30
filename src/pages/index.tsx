@@ -6,7 +6,7 @@ import { StaticImage } from "gatsby-plugin-image";
 export default function IndexPage(): React.ReactElement {
   return (
     <Layout>
-      <div className="px-4 py-2">
+      <div className="px-4 py-6">
         <StaticImage className="w-full" src="../images/blogimg1.jpg" alt="First blog post" />
       </div>
     </Layout>

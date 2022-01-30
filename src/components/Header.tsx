@@ -59,7 +59,7 @@ function SiteNav(): React.ReactElement {
 
 export default function Header(): React.ReactElement {
   return (
-    <header className="h-24 w-full relative max-w-screen-xl">
+    <header className="h-24 w-full relative max-w-screen-xl mx-auto">
       {/* Stacking context one: logo */}
       <div className="h-16 w-full flex flex-row justify-center">
         <a href="/" className="py-4 px-2">
