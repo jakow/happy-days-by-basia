@@ -11,7 +11,6 @@ module.exports = {
         url: "http://localhost:8888/graphql",
       },
     },
-    "gatsby-plugin-image",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     {
@@ -21,6 +20,7 @@ module.exports = {
       },
     },
     "gatsby-transformer-remark",
+    "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
     {
