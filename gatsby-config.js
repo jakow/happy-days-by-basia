@@ -8,7 +8,7 @@ module.exports = {
     {
       resolve: "gatsby-source-wordpress",
       options: {
-        url: "http://localhost:8888/graphql",
+        url: "https://wp.happydaysbybasia.com/index.php?graphql",
       },
     },
     "gatsby-plugin-react-helmet",
