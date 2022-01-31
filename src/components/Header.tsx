@@ -2,6 +2,7 @@ import * as React from "react";
 import logo from "../images/basia-logo-black.svg";
 import tiktokLogo from "../images/social/tiktok-black.svg";
 import igLogo from "../images/social/ig-black.svg";
+import { StaticImage } from "gatsby-plugin-image";
 
 type SocialInfo = {
   name: string;
@@ -63,7 +64,13 @@ export default function Header(): React.ReactElement {
       {/* Stacking context one: logo */}
       <div className="h-16 w-full flex flex-row justify-center">
         <a href="/" className="py-4 px-2">
-          <img src={logo} alt="Happy Days By Basia" className="h-8"/>
+          <img
+            height={32}
+            width={140}
+            src={logo}
+            alt="Happy Days By Basia"
+            className="h-8"
+          />
         </a>
       </div>
       {/* <div className="absolute left-0 top-0 h-full">Search section</div> */}
