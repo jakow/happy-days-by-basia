@@ -26,7 +26,13 @@ const social: Array<SocialInfo> = [
 function SocialLink({ name, icon, link }: SocialInfo): React.ReactElement {
   return (
     <a href={link} target="_blank" rel="me noopener">
-      <img alt={name} src={icon} className="h-6 w-auto" />
+      <img
+        width={24}
+        height={24}
+        alt={name}
+        src={icon}
+        className="h-6 w-auto"
+      />
     </a>
   );
 }
