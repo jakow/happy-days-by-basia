@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
+    siteUrl: "https://www.happydaysbybasia.com",
     title: "Happy Days by Basia",
   },
   plugins: [
@@ -8,7 +8,7 @@ module.exports = {
     {
       resolve: "gatsby-source-wordpress",
       options: {
-        url: "https://wp.happydaysbybasia.com/index.php?graphql",
+        url: "https://wp.happydaysbybasia.com/graphql",
       },
     },
     "gatsby-plugin-react-helmet",
