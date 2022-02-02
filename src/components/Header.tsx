@@ -2,7 +2,6 @@ import * as React from "react";
 import logo from "../images/basia-logo-black.svg";
 import tiktokLogo from "../images/social/tiktok-black.svg";
 import igLogo from "../images/social/ig-black.svg";
-import { StaticImage } from "gatsby-plugin-image";
 
 type SocialInfo = {
   name: string;
@@ -38,11 +37,11 @@ function SocialLink({ name, icon, link }: SocialInfo): React.ReactElement {
 }
 
 type NavItemProps = {
-  name: React.ReactNode;
+  children: React.ReactNode;
   href: string;
 };
 
-function NavItem({ children, href }): React.ReactElement {
+function NavItem({ children, href }: NavItemProps): React.ReactElement {
   return (
     <li className="mx-2">
       <a className="py-2 px-1 font-serif text-lg" href={href}>
@@ -66,7 +65,7 @@ function SiteNav(): React.ReactElement {
 
 export default function Header(): React.ReactElement {
   return (
-    <header className="h-24 w-full relative max-w-screen-xl mx-auto">
+    <header className="h-16 w-full relative max-w-screen-xl mx-auto">
       {/* Stacking context one: logo */}
       <div className="h-16 w-full flex flex-row justify-center">
         <a href="/" className="py-4 px-2">
@@ -82,9 +81,9 @@ export default function Header(): React.ReactElement {
       {/* <div className="absolute left-0 top-0 h-full">Search section</div> */}
       {/* Stacking context two: nav and social */}
       <div>
-        <div className="absolute top-16 w-full">
+        {/* <div className="absolute top-16 w-full">
           <SiteNav />
-        </div>
+        </div> */}
         <div className="absolute top-0 right-0 h-16 flex flex-row items-center pr-4">
           {social.map((sm) => (
             <span key={sm.name} className="ml-4">

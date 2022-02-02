@@ -1,7 +1,7 @@
-import * as React from "react"
-import Layout from "../components/Layout"
+import * as React from "react";
+import Layout from "../components/Layout";
 import { StaticImage } from "gatsby-plugin-image";
-import Helmet from 'react-helmet';
+import Helmet from "react-helmet";
 
 export default function IndexPage(): React.ReactElement {
   return (
@@ -14,6 +14,7 @@ export default function IndexPage(): React.ReactElement {
           className="w-full"
           src="../images/blogimg1.jpg"
           alt="First blog post"
+          breakpoints={[640, 768, 1024, 1280, 1536]}
         />
       </div>
     </Layout>
