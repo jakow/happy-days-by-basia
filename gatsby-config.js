@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env`,
+});
+
 module.exports = {
   siteMetadata: {
     siteUrl: "https://www.yourdomain.tld",
@@ -5,12 +9,12 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-typescript",
-    {
-      resolve: "gatsby-source-wordpress",
-      options: {
-        url: "https://wp.happydaysbybasia.com/index.php?graphql",
-      },
-    },
+    // {
+    //   resolve: "gatsby-source-wordpress",
+    //   options: {
+    //     url: "https://wp.happydaysbybasia.com/graphql",
+    //   },
+    // },
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     {
@@ -23,6 +27,15 @@ module.exports = {
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
+    "gatsby-plugin-postcss",
+    "gatsby-plugin-gatsby-cloud",
+    {
+      resolve: "gatsby-source-contentful",
+      options: {
+        spaceId: "z89uahkhghyt",
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+      },
+    },
     // {
     //   resolve: "gatsby-source-filesystem",
     //   options: {
@@ -39,7 +52,5 @@ module.exports = {
     //   },
     //   __key: "pages",
     // },
-    "gatsby-plugin-postcss",
-    "gatsby-plugin-gatsby-cloud",
   ],
 };
