@@ -9,6 +9,14 @@ module.exports = {
       resolve: "gatsby-source-wordpress",
       options: {
         url: "https://wp.happydaysbybasia.com/graphql",
+        type: {
+          MediaItem: {
+            createFileNodes: false,
+            localFile: {
+              requestConcurrency: 1,
+            },
+          },
+        },
       },
     },
     "gatsby-plugin-react-helmet",
@@ -19,26 +27,9 @@ module.exports = {
         icon: "src/images/icon.png",
       },
     },
-    "gatsby-transformer-remark",
     "gatsby-plugin-image",
     "gatsby-plugin-sharp",
     "gatsby-transformer-sharp",
-    // {
-    //   resolve: "gatsby-source-filesystem",
-    //   options: {
-    //     name: "images",
-    //     path: "./src/images/",
-    //   },
-    //   __key: "images",
-    // },
-    // {
-    //   resolve: "gatsby-source-filesystem",
-    //   options: {
-    //     name: "pages",
-    //     path: "./src/pages/",
-    //   },
-    //   __key: "pages",
-    // },
     "gatsby-plugin-postcss",
     "gatsby-plugin-gatsby-cloud",
   ],
