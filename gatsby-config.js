@@ -4,17 +4,11 @@ require("dotenv").config({
 
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
+    siteUrl: "https://www.happydaysbybasia.com",
     title: "Happy Days by Basia",
   },
   plugins: [
     "gatsby-plugin-typescript",
-    // {
-    //   resolve: "gatsby-source-wordpress",
-    //   options: {
-    //     url: "https://wp.happydaysbybasia.com/graphql",
-    //   },
-    // },
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     {
@@ -32,25 +26,16 @@ module.exports = {
     {
       resolve: "gatsby-source-contentful",
       options: {
-        spaceId: "z89uahkhghyt",
-        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN,
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken:
+          process.env.NODE_ENV === "production"
+            ? process.env.CONTENTFUL_DELIVERY_ACCESS_TOKEN
+            : process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+        host:
+          process.env.NODE_ENV === "production"
+            ? "cdn.contentful.com"
+            : "preview.contentful.com",
       },
     },
-    // {
-    //   resolve: "gatsby-source-filesystem",
-    //   options: {
-    //     name: "images",
-    //     path: "./src/images/",
-    //   },
-    //   __key: "images",
-    // },
-    // {
-    //   resolve: "gatsby-source-filesystem",
-    //   options: {
-    //     name: "pages",
-    //     path: "./src/pages/",
-    //   },
-    //   __key: "pages",
-    // },
   ],
 };
