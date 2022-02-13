@@ -1,3 +1,7 @@
+require("dotenv").config({
+  path: `.env`,
+});
+
 module.exports = {
   siteMetadata: {
     siteUrl: "https://www.happydaysbybasia.com",
@@ -5,20 +9,6 @@ module.exports = {
   },
   plugins: [
     "gatsby-plugin-typescript",
-    {
-      resolve: "gatsby-source-wordpress",
-      options: {
-        url: "https://wp.happydaysbybasia.com/graphql",
-        type: {
-          MediaItem: {
-            createFileNodes: false,
-            localFile: {
-              requestConcurrency: 1,
-            },
-          },
-        },
-      },
-    },
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sitemap",
     {
@@ -32,5 +22,19 @@ module.exports = {
     "gatsby-transformer-sharp",
     "gatsby-plugin-postcss",
     "gatsby-plugin-gatsby-cloud",
+    {
+      resolve: "gatsby-source-contentful",
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
+        accessToken:
+          process.env.NODE_ENV === "production"
+            ? process.env.CONTENTFUL_DELIVERY_ACCESS_TOKEN
+            : process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN,
+        host:
+          process.env.NODE_ENV === "production"
+            ? "cdn.contentful.com"
+            : "preview.contentful.com",
+      },
+    },
   ],
 };
