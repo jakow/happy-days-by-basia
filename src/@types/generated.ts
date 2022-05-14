@@ -3850,290 +3850,6 @@ export type JsonQueryOperatorInput = {
   regex?: InputMaybe<Scalars["JSON"]>;
 };
 
-export enum MarkdownExcerptFormats {
-  Html = "HTML",
-  Markdown = "MARKDOWN",
-  Plain = "PLAIN",
-}
-
-export type MarkdownHeading = {
-  __typename?: "MarkdownHeading";
-  depth?: Maybe<Scalars["Int"]>;
-  id?: Maybe<Scalars["String"]>;
-  value?: Maybe<Scalars["String"]>;
-};
-
-export type MarkdownHeadingFilterInput = {
-  depth?: InputMaybe<IntQueryOperatorInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  value?: InputMaybe<StringQueryOperatorInput>;
-};
-
-export type MarkdownHeadingFilterListInput = {
-  elemMatch?: InputMaybe<MarkdownHeadingFilterInput>;
-};
-
-export enum MarkdownHeadingLevels {
-  H1 = "h1",
-  H2 = "h2",
-  H3 = "h3",
-  H4 = "h4",
-  H5 = "h5",
-  H6 = "h6",
-}
-
-export type MarkdownRemark = Node & {
-  __typename?: "MarkdownRemark";
-  children: Array<Node>;
-  excerpt?: Maybe<Scalars["String"]>;
-  excerptAst?: Maybe<Scalars["JSON"]>;
-  headings?: Maybe<Array<Maybe<MarkdownHeading>>>;
-  html?: Maybe<Scalars["String"]>;
-  htmlAst?: Maybe<Scalars["JSON"]>;
-  id: Scalars["ID"];
-  internal: Internal;
-  parent?: Maybe<Node>;
-  tableOfContents?: Maybe<Scalars["String"]>;
-  timeToRead?: Maybe<Scalars["Int"]>;
-  wordCount?: Maybe<MarkdownWordCount>;
-};
-
-export type MarkdownRemarkExcerptArgs = {
-  format?: InputMaybe<MarkdownExcerptFormats>;
-  pruneLength?: InputMaybe<Scalars["Int"]>;
-  truncate?: InputMaybe<Scalars["Boolean"]>;
-};
-
-export type MarkdownRemarkExcerptAstArgs = {
-  pruneLength?: InputMaybe<Scalars["Int"]>;
-  truncate?: InputMaybe<Scalars["Boolean"]>;
-};
-
-export type MarkdownRemarkHeadingsArgs = {
-  depth?: InputMaybe<MarkdownHeadingLevels>;
-};
-
-export type MarkdownRemarkTableOfContentsArgs = {
-  absolute?: InputMaybe<Scalars["Boolean"]>;
-  heading?: InputMaybe<Scalars["String"]>;
-  maxDepth?: InputMaybe<Scalars["Int"]>;
-  pathToSlugField?: InputMaybe<Scalars["String"]>;
-};
-
-export type MarkdownRemarkConnection = {
-  __typename?: "MarkdownRemarkConnection";
-  distinct: Array<Scalars["String"]>;
-  edges: Array<MarkdownRemarkEdge>;
-  group: Array<MarkdownRemarkGroupConnection>;
-  max?: Maybe<Scalars["Float"]>;
-  min?: Maybe<Scalars["Float"]>;
-  nodes: Array<MarkdownRemark>;
-  pageInfo: PageInfo;
-  sum?: Maybe<Scalars["Float"]>;
-  totalCount: Scalars["Int"];
-};
-
-export type MarkdownRemarkConnectionDistinctArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkConnectionGroupArgs = {
-  field: MarkdownRemarkFieldsEnum;
-  limit?: InputMaybe<Scalars["Int"]>;
-  skip?: InputMaybe<Scalars["Int"]>;
-};
-
-export type MarkdownRemarkConnectionMaxArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkConnectionMinArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkConnectionSumArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkEdge = {
-  __typename?: "MarkdownRemarkEdge";
-  next?: Maybe<MarkdownRemark>;
-  node: MarkdownRemark;
-  previous?: Maybe<MarkdownRemark>;
-};
-
-export enum MarkdownRemarkFieldsEnum {
-  Children = "children",
-  ChildrenChildren = "children___children",
-  ChildrenChildrenChildren = "children___children___children",
-  ChildrenChildrenChildrenChildren = "children___children___children___children",
-  ChildrenChildrenChildrenId = "children___children___children___id",
-  ChildrenChildrenId = "children___children___id",
-  ChildrenChildrenInternalContent = "children___children___internal___content",
-  ChildrenChildrenInternalContentDigest = "children___children___internal___contentDigest",
-  ChildrenChildrenInternalDescription = "children___children___internal___description",
-  ChildrenChildrenInternalFieldOwners = "children___children___internal___fieldOwners",
-  ChildrenChildrenInternalIgnoreType = "children___children___internal___ignoreType",
-  ChildrenChildrenInternalMediaType = "children___children___internal___mediaType",
-  ChildrenChildrenInternalOwner = "children___children___internal___owner",
-  ChildrenChildrenInternalType = "children___children___internal___type",
-  ChildrenChildrenParentChildren = "children___children___parent___children",
-  ChildrenChildrenParentId = "children___children___parent___id",
-  ChildrenId = "children___id",
-  ChildrenInternalContent = "children___internal___content",
-  ChildrenInternalContentDigest = "children___internal___contentDigest",
-  ChildrenInternalDescription = "children___internal___description",
-  ChildrenInternalFieldOwners = "children___internal___fieldOwners",
-  ChildrenInternalIgnoreType = "children___internal___ignoreType",
-  ChildrenInternalMediaType = "children___internal___mediaType",
-  ChildrenInternalOwner = "children___internal___owner",
-  ChildrenInternalType = "children___internal___type",
-  ChildrenParentChildren = "children___parent___children",
-  ChildrenParentChildrenChildren = "children___parent___children___children",
-  ChildrenParentChildrenId = "children___parent___children___id",
-  ChildrenParentId = "children___parent___id",
-  ChildrenParentInternalContent = "children___parent___internal___content",
-  ChildrenParentInternalContentDigest = "children___parent___internal___contentDigest",
-  ChildrenParentInternalDescription = "children___parent___internal___description",
-  ChildrenParentInternalFieldOwners = "children___parent___internal___fieldOwners",
-  ChildrenParentInternalIgnoreType = "children___parent___internal___ignoreType",
-  ChildrenParentInternalMediaType = "children___parent___internal___mediaType",
-  ChildrenParentInternalOwner = "children___parent___internal___owner",
-  ChildrenParentInternalType = "children___parent___internal___type",
-  ChildrenParentParentChildren = "children___parent___parent___children",
-  ChildrenParentParentId = "children___parent___parent___id",
-  Excerpt = "excerpt",
-  ExcerptAst = "excerptAst",
-  Headings = "headings",
-  HeadingsDepth = "headings___depth",
-  HeadingsId = "headings___id",
-  HeadingsValue = "headings___value",
-  Html = "html",
-  HtmlAst = "htmlAst",
-  Id = "id",
-  InternalContent = "internal___content",
-  InternalContentDigest = "internal___contentDigest",
-  InternalDescription = "internal___description",
-  InternalFieldOwners = "internal___fieldOwners",
-  InternalIgnoreType = "internal___ignoreType",
-  InternalMediaType = "internal___mediaType",
-  InternalOwner = "internal___owner",
-  InternalType = "internal___type",
-  ParentChildren = "parent___children",
-  ParentChildrenChildren = "parent___children___children",
-  ParentChildrenChildrenChildren = "parent___children___children___children",
-  ParentChildrenChildrenId = "parent___children___children___id",
-  ParentChildrenId = "parent___children___id",
-  ParentChildrenInternalContent = "parent___children___internal___content",
-  ParentChildrenInternalContentDigest = "parent___children___internal___contentDigest",
-  ParentChildrenInternalDescription = "parent___children___internal___description",
-  ParentChildrenInternalFieldOwners = "parent___children___internal___fieldOwners",
-  ParentChildrenInternalIgnoreType = "parent___children___internal___ignoreType",
-  ParentChildrenInternalMediaType = "parent___children___internal___mediaType",
-  ParentChildrenInternalOwner = "parent___children___internal___owner",
-  ParentChildrenInternalType = "parent___children___internal___type",
-  ParentChildrenParentChildren = "parent___children___parent___children",
-  ParentChildrenParentId = "parent___children___parent___id",
-  ParentId = "parent___id",
-  ParentInternalContent = "parent___internal___content",
-  ParentInternalContentDigest = "parent___internal___contentDigest",
-  ParentInternalDescription = "parent___internal___description",
-  ParentInternalFieldOwners = "parent___internal___fieldOwners",
-  ParentInternalIgnoreType = "parent___internal___ignoreType",
-  ParentInternalMediaType = "parent___internal___mediaType",
-  ParentInternalOwner = "parent___internal___owner",
-  ParentInternalType = "parent___internal___type",
-  ParentParentChildren = "parent___parent___children",
-  ParentParentChildrenChildren = "parent___parent___children___children",
-  ParentParentChildrenId = "parent___parent___children___id",
-  ParentParentId = "parent___parent___id",
-  ParentParentInternalContent = "parent___parent___internal___content",
-  ParentParentInternalContentDigest = "parent___parent___internal___contentDigest",
-  ParentParentInternalDescription = "parent___parent___internal___description",
-  ParentParentInternalFieldOwners = "parent___parent___internal___fieldOwners",
-  ParentParentInternalIgnoreType = "parent___parent___internal___ignoreType",
-  ParentParentInternalMediaType = "parent___parent___internal___mediaType",
-  ParentParentInternalOwner = "parent___parent___internal___owner",
-  ParentParentInternalType = "parent___parent___internal___type",
-  ParentParentParentChildren = "parent___parent___parent___children",
-  ParentParentParentId = "parent___parent___parent___id",
-  TableOfContents = "tableOfContents",
-  TimeToRead = "timeToRead",
-  WordCountParagraphs = "wordCount___paragraphs",
-  WordCountSentences = "wordCount___sentences",
-  WordCountWords = "wordCount___words",
-}
-
-export type MarkdownRemarkFilterInput = {
-  children?: InputMaybe<NodeFilterListInput>;
-  excerpt?: InputMaybe<StringQueryOperatorInput>;
-  excerptAst?: InputMaybe<JsonQueryOperatorInput>;
-  headings?: InputMaybe<MarkdownHeadingFilterListInput>;
-  html?: InputMaybe<StringQueryOperatorInput>;
-  htmlAst?: InputMaybe<JsonQueryOperatorInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  internal?: InputMaybe<InternalFilterInput>;
-  parent?: InputMaybe<NodeFilterInput>;
-  tableOfContents?: InputMaybe<StringQueryOperatorInput>;
-  timeToRead?: InputMaybe<IntQueryOperatorInput>;
-  wordCount?: InputMaybe<MarkdownWordCountFilterInput>;
-};
-
-export type MarkdownRemarkGroupConnection = {
-  __typename?: "MarkdownRemarkGroupConnection";
-  distinct: Array<Scalars["String"]>;
-  edges: Array<MarkdownRemarkEdge>;
-  field: Scalars["String"];
-  fieldValue?: Maybe<Scalars["String"]>;
-  group: Array<MarkdownRemarkGroupConnection>;
-  max?: Maybe<Scalars["Float"]>;
-  min?: Maybe<Scalars["Float"]>;
-  nodes: Array<MarkdownRemark>;
-  pageInfo: PageInfo;
-  sum?: Maybe<Scalars["Float"]>;
-  totalCount: Scalars["Int"];
-};
-
-export type MarkdownRemarkGroupConnectionDistinctArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkGroupConnectionGroupArgs = {
-  field: MarkdownRemarkFieldsEnum;
-  limit?: InputMaybe<Scalars["Int"]>;
-  skip?: InputMaybe<Scalars["Int"]>;
-};
-
-export type MarkdownRemarkGroupConnectionMaxArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkGroupConnectionMinArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkGroupConnectionSumArgs = {
-  field: MarkdownRemarkFieldsEnum;
-};
-
-export type MarkdownRemarkSortInput = {
-  fields?: InputMaybe<Array<InputMaybe<MarkdownRemarkFieldsEnum>>>;
-  order?: InputMaybe<Array<InputMaybe<SortOrderEnum>>>;
-};
-
-export type MarkdownWordCount = {
-  __typename?: "MarkdownWordCount";
-  paragraphs?: Maybe<Scalars["Int"]>;
-  sentences?: Maybe<Scalars["Int"]>;
-  words?: Maybe<Scalars["Int"]>;
-};
-
-export type MarkdownWordCountFilterInput = {
-  paragraphs?: InputMaybe<IntQueryOperatorInput>;
-  sentences?: InputMaybe<IntQueryOperatorInput>;
-  words?: InputMaybe<IntQueryOperatorInput>;
-};
-
 /** Node Interface */
 export type Node = {
   children: Array<Node>;
@@ -4203,7 +3919,6 @@ export type Query = {
   allDirectory: DirectoryConnection;
   allFile: FileConnection;
   allImageSharp: ImageSharpConnection;
-  allMarkdownRemark: MarkdownRemarkConnection;
   allSite: SiteConnection;
   allSiteBuildMetadata: SiteBuildMetadataConnection;
   allSiteFunction: SiteFunctionConnection;
@@ -4220,7 +3935,6 @@ export type Query = {
   directory?: Maybe<Directory>;
   file?: Maybe<File>;
   imageSharp?: Maybe<ImageSharp>;
-  markdownRemark?: Maybe<MarkdownRemark>;
   site?: Maybe<Site>;
   siteBuildMetadata?: Maybe<SiteBuildMetadata>;
   siteFunction?: Maybe<SiteFunction>;
@@ -4303,13 +4017,6 @@ export type QueryAllImageSharpArgs = {
   limit?: InputMaybe<Scalars["Int"]>;
   skip?: InputMaybe<Scalars["Int"]>;
   sort?: InputMaybe<ImageSharpSortInput>;
-};
-
-export type QueryAllMarkdownRemarkArgs = {
-  filter?: InputMaybe<MarkdownRemarkFilterInput>;
-  limit?: InputMaybe<Scalars["Int"]>;
-  skip?: InputMaybe<Scalars["Int"]>;
-  sort?: InputMaybe<MarkdownRemarkSortInput>;
 };
 
 export type QueryAllSiteArgs = {
@@ -4549,21 +4256,6 @@ export type QueryImageSharpArgs = {
   original?: InputMaybe<ImageSharpOriginalFilterInput>;
   parent?: InputMaybe<NodeFilterInput>;
   resize?: InputMaybe<ImageSharpResizeFilterInput>;
-};
-
-export type QueryMarkdownRemarkArgs = {
-  children?: InputMaybe<NodeFilterListInput>;
-  excerpt?: InputMaybe<StringQueryOperatorInput>;
-  excerptAst?: InputMaybe<JsonQueryOperatorInput>;
-  headings?: InputMaybe<MarkdownHeadingFilterListInput>;
-  html?: InputMaybe<StringQueryOperatorInput>;
-  htmlAst?: InputMaybe<JsonQueryOperatorInput>;
-  id?: InputMaybe<StringQueryOperatorInput>;
-  internal?: InputMaybe<InternalFilterInput>;
-  parent?: InputMaybe<NodeFilterInput>;
-  tableOfContents?: InputMaybe<StringQueryOperatorInput>;
-  timeToRead?: InputMaybe<IntQueryOperatorInput>;
-  wordCount?: InputMaybe<MarkdownWordCountFilterInput>;
 };
 
 export type QuerySiteArgs = {
@@ -6122,6 +5814,38 @@ export type GatsbyImageSharpFluid_WithWebp_NoBase64Fragment = {
   sizes: string;
 };
 
+export type PagesQueryQueryVariables = Exact<{ [key: string]: never }>;
+
+export type PagesQueryQuery = {
+  __typename?: "Query";
+  allSiteFunction: {
+    __typename?: "SiteFunctionConnection";
+    nodes: Array<{ __typename?: "SiteFunction"; functionRoute: string }>;
+  };
+  allSitePage: {
+    __typename?: "SitePageConnection";
+    nodes: Array<{ __typename?: "SitePage"; path: string }>;
+  };
+};
+
+export type BlogPostCoverImageFragment = {
+  __typename?: "ContentfulImageWithFocalPoint";
+  id: string;
+  title?: string | null;
+  image?: {
+    __typename?: "ContentfulAsset";
+    gatsbyImageData?: any | null;
+  } | null;
+  focalPoint?: {
+    __typename?: "contentfulImageWithFocalPointFocalPointJsonNode";
+    focalPoint?: {
+      __typename?: "contentfulImageWithFocalPointFocalPointJsonNodeFocalPoint";
+      x?: number | null;
+      y?: number | null;
+    } | null;
+  } | null;
+};
+
 export type GetAllPostsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllPostsQuery = {
@@ -6132,6 +5856,7 @@ export type GetAllPostsQuery = {
       __typename?: "ContentfulBlogPost";
       slug?: string | null;
       id: string;
+      title?: string | null;
     }>;
   };
 };
@@ -6159,6 +5884,23 @@ export type BlogPostQuery = {
     __typename?: "ContentfulBlogPost";
     title?: string | null;
     slug?: string | null;
+    coverImage?: {
+      __typename?: "ContentfulImageWithFocalPoint";
+      id: string;
+      title?: string | null;
+      image?: {
+        __typename?: "ContentfulAsset";
+        gatsbyImageData?: any | null;
+      } | null;
+      focalPoint?: {
+        __typename?: "contentfulImageWithFocalPointFocalPointJsonNode";
+        focalPoint?: {
+          __typename?: "contentfulImageWithFocalPointFocalPointJsonNodeFocalPoint";
+          x?: number | null;
+          y?: number | null;
+        } | null;
+      } | null;
+    } | null;
     body?: {
       __typename?: "ContentfulBlogPostBody";
       raw?: string | null;

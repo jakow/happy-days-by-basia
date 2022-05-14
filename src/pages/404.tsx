@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Link } from "gatsby";
 import Layout from "../components/Layout";
-import Helmet from "react-helmet";
+import { Helmet } from "react-helmet";
 
 export default function NotFoundPage(): React.ReactElement {
   return (

@@ -10,6 +10,7 @@ import {
   RenderNode,
   Options,
 } from "@contentful/rich-text-react-renderer";
+
 import {
   BLOCKS,
   INLINES,
@@ -19,7 +20,8 @@ import {
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import { GatsbyImage } from "gatsby-plugin-image";
-import { reporter } from "gatsby-cli/lib/reporter/reporter";
+import ImageWithFocalPoint from "../components/BlogPostCoverImage";
+import BlogPostCoverImage from "../components/BlogPostCoverImage";
 
 type Reference = BlogPostQuery["contentfulBlogPost"]["body"]["references"][0];
 
@@ -42,10 +44,15 @@ type Props = {
 export default function BlogPost({ data }: Props): React.ReactElement {
   const post = data!.contentfulBlogPost;
 
-  const rawBody = post.body?.raw;
+  const { coverImage, body } = post;
+
+  const rawBody = body?.raw;
   const parsedBody: Document =
     rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
-  const references = mapFromValues(post.body.references ?? [], (r) => r.contentful_id);
+  const references = mapFromValues(
+    post.body.references ?? [],
+    (r) => r.contentful_id
+  );
 
   const renderOptions: Options = {
     renderNode: {
@@ -58,7 +65,7 @@ export default function BlogPost({ data }: Props): React.ReactElement {
       [INLINES.EMBEDDED_ENTRY]: (node, _children): React.ReactNode => {
         const nodeTyped = node as EntryLinkInline;
         const resource = references.get(nodeTyped.data.target.sys.id);
-        switch(resource.__typename) {
+        switch (resource.__typename) {
           case "ContentfulPostImage":
             return <PostImage image={resource as ContentfulPostImage} />;
           default:
@@ -75,6 +82,7 @@ export default function BlogPost({ data }: Props): React.ReactElement {
         <title>{post.title}</title>
       </Helmet>
       <article className="prose mx-auto">
+        {coverImage ? <BlogPostCoverImage image={coverImage} /> : null}
         {documentToReactComponents(parsedBody, renderOptions)}
       </article>
       <div>
@@ -88,6 +96,9 @@ export const pageQuery = graphql`
   query BlogPost($id: String) {
     contentfulBlogPost(id: { eq: $id }) {
       title
+      coverImage {
+        ...BlogPostCoverImage
+      }
       slug
       body {
         raw

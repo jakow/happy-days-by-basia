@@ -17,6 +17,7 @@ export default async function createPages({
         nodes {
           slug
           id
+          title
         }
       }
     }
@@ -31,6 +32,7 @@ export default async function createPages({
   reporter.info(`Creating ${data.allContentfulBlogPost.nodes.length} Blog Posts`);
 
   for (const post of data.allContentfulBlogPost.nodes) {
+    reporter.info(`Creating post ${post.id} with slug ${post.slug}`)
     createPage({
       path: `/post/${post.slug}`,
       component: blogPostTemplate,
