@@ -20,7 +20,6 @@ import {
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import { GatsbyImage } from "gatsby-plugin-image";
-import ImageWithFocalPoint from "../components/BlogPostCoverImage";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
 
 type Reference = BlogPostQuery["contentfulBlogPost"]["body"]["references"][0];
@@ -56,13 +55,13 @@ export default function BlogPost({ data }: Props): React.ReactElement {
 
   const renderOptions: Options = {
     renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: (node, _children): React.ReactNode => {
+      [BLOCKS.EMBEDDED_ASSET]: (_node, _children): React.ReactNode => {
         return null;
       },
-      [BLOCKS.EMBEDDED_ENTRY]: (node, _children): React.ReactNode => {
+      [BLOCKS.EMBEDDED_ENTRY]: (_node, _children): React.ReactNode => {
         return null;
       },
-      [INLINES.EMBEDDED_ENTRY]: (node, _children): React.ReactNode => {
+      [INLINES.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkInline;
         const resource = references.get(nodeTyped.data.target.sys.id);
         switch (resource.__typename) {
@@ -77,17 +76,17 @@ export default function BlogPost({ data }: Props): React.ReactElement {
   };
 
   return (
-    <Layout>
+    <Layout headerStyle="immersive">
       <Helmet>
         <title>{post.title}</title>
       </Helmet>
-      <article className="prose mx-auto">
+      <article>
         {coverImage ? <BlogPostCoverImage image={coverImage} /> : null}
-        {documentToReactComponents(parsedBody, renderOptions)}
+        <div className="prose mx-auto mw-[600px]">
+          {documentToReactComponents(parsedBody, renderOptions)}
+        </div>
       </article>
-      <div>
-        <code>{rawBody}</code>
-      </div>
+      <div>{/* <code>{rawBody}</code> */}</div>
     </Layout>
   );
 }

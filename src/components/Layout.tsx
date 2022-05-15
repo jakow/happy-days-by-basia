@@ -1,15 +1,19 @@
 import * as React from "react";
-import Header from "./Header";
+import Header, { HeaderStyle } from "./Header";
 
 type Props = {
   children: React.ReactNode;
+  headerStyle?: HeaderStyle | null;
 };
 
-export default function Layout({ children }: Props): React.ReactElement {
+export default function Layout({
+  children,
+  headerStyle,
+}: Props): React.ReactElement {
   return (
     <div className="h-screen bg-ivory">
-      <Header />
-      <main className="max-w-screen-xl mx-auto">{children}</main>
+      <Header headerStyle={headerStyle} />
+      <main className="mx-auto">{children}</main>
     </div>
   );
 }
