@@ -5883,6 +5883,7 @@ export type BlogPostQuery = {
   contentfulBlogPost?: {
     __typename?: "ContentfulBlogPost";
     title?: string | null;
+    dateCreated?: any | null;
     slug?: string | null;
     coverImage?: {
       __typename?: "ContentfulImageWithFocalPoint";

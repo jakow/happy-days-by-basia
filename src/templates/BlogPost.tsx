@@ -2,12 +2,16 @@ import * as React from "react";
 import Layout from "../components/layout";
 import { graphql } from "gatsby";
 import { Helmet } from "react-helmet";
-import type { BlogPostQuery, ContentfulPostImage } from "../@types/generated";
+import type {
+  BlogPostCoverImageFragment,
+  BlogPostQuery,
+  ContentfulImageWithFocalPoint,
+  ContentfulPostImage,
+} from "../@types/generated";
 import type { Document } from "@contentful/rich-text-types";
 import { mapFromValues } from "../utils/maps";
 import {
   documentToReactComponents,
-  RenderNode,
   Options,
 } from "@contentful/rich-text-react-renderer";
 
@@ -22,17 +26,38 @@ import {
 import { GatsbyImage } from "gatsby-plugin-image";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
 
-type Reference = BlogPostQuery["contentfulBlogPost"]["body"]["references"][0];
-
 type PostImageProps = {
   image: ContentfulPostImage;
 };
+
 function PostImage({ image }: PostImageProps): React.ReactElement {
   return (
     <GatsbyImage
       image={image!.image!.gatsbyImageData}
       alt={image.description}
     />
+  );
+}
+
+type BannerProps = {
+  image: BlogPostCoverImageFragment;
+  title: string;
+  dateCreated: Date;
+};
+function Banner({
+  dateCreated,
+  image,
+  title,
+}: BannerProps): React.ReactElement {
+  return (
+    <div className="relative">
+      <div className="absolute w-full z-10 bottom-32">
+        <div className="max-w-2xl px-8 mx-auto">
+          <h1>{title}</h1>
+        </div>
+      </div>
+      <BlogPostCoverImage image={image} />
+    </div>
   );
 }
 
@@ -43,7 +68,7 @@ type Props = {
 export default function BlogPost({ data }: Props): React.ReactElement {
   const post = data!.contentfulBlogPost;
 
-  const { coverImage, body } = post;
+  const { coverImage, body, title, dateCreated } = post;
 
   const rawBody = body?.raw;
   const parsedBody: Document =
@@ -55,10 +80,10 @@ export default function BlogPost({ data }: Props): React.ReactElement {
 
   const renderOptions: Options = {
     renderNode: {
-      [BLOCKS.EMBEDDED_ASSET]: (_node, _children): React.ReactNode => {
+      [BLOCKS.EMBEDDED_ASSET]: (): React.ReactNode => {
         return null;
       },
-      [BLOCKS.EMBEDDED_ENTRY]: (_node, _children): React.ReactNode => {
+      [BLOCKS.EMBEDDED_ENTRY]: (): React.ReactNode => {
         return null;
       },
       [INLINES.EMBEDDED_ENTRY]: (node): React.ReactNode => {
@@ -81,8 +106,10 @@ export default function BlogPost({ data }: Props): React.ReactElement {
         <title>{post.title}</title>
       </Helmet>
       <article>
-        {coverImage ? <BlogPostCoverImage image={coverImage} /> : null}
-        <div className="prose mx-auto mw-[600px]">
+        {coverImage ? (
+          <Banner title={title} dateCreated={dateCreated} image={coverImage} />
+        ) : null}
+        <div className="prose mx-auto max-w-2xl">
           {documentToReactComponents(parsedBody, renderOptions)}
         </div>
       </article>
@@ -98,7 +125,7 @@ export const pageQuery = graphql`
       coverImage {
         ...BlogPostCoverImage
       }
-      slug
+      dateCreated
       body {
         raw
         references {
@@ -112,6 +139,7 @@ export const pageQuery = graphql`
           }
         }
       }
+      slug
     }
   }
 `;
