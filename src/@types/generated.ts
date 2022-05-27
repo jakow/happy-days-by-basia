@@ -5846,6 +5846,16 @@ export type BlogPostCoverImageFragment = {
   } | null;
 };
 
+export type PostImageFragment = {
+  __typename?: "ContentfulPostImage";
+  align?: string | null;
+  image?: {
+    __typename?: "ContentfulAsset";
+    gatsbyImageData?: any | null;
+    description?: string | null;
+  } | null;
+};
+
 export type GetAllPostsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAllPostsQuery = {
@@ -5908,6 +5918,7 @@ export type BlogPostQuery = {
       references?: Array<{
         __typename: "ContentfulPostImage";
         contentful_id: string;
+        align?: string | null;
         image?: {
           __typename?: "ContentfulAsset";
           gatsbyImageData?: any | null;

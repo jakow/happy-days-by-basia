@@ -5,8 +5,8 @@ import { Helmet } from "react-helmet";
 import type {
   BlogPostCoverImageFragment,
   BlogPostQuery,
-  ContentfulPostImage,
 } from "../@types/generated";
+import PostImage from "../components/PostImage";
 import type { Document } from "@contentful/rich-text-types";
 import { mapFromValues } from "../utils/maps";
 import {
@@ -22,21 +22,7 @@ import {
   // EntryLinkBlock,
   EntryLinkInline,
 } from "@contentful/rich-text-types";
-import { GatsbyImage } from "gatsby-plugin-image";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
-
-type PostImageProps = {
-  image: ContentfulPostImage;
-};
-
-function PostImage({ image }: PostImageProps): React.ReactElement {
-  return (
-    <GatsbyImage
-      image={image!.image!.gatsbyImageData}
-      alt={image.description}
-    />
-  );
-}
 
 type BannerProps = {
   image: BlogPostCoverImageFragment;
@@ -90,7 +76,7 @@ export default function BlogPost({ data }: Props): React.ReactElement {
         const resource = references.get(nodeTyped.data.target.sys.id);
         switch (resource.__typename) {
           case "ContentfulPostImage":
-            return <PostImage image={resource as ContentfulPostImage} />;
+            return <PostImage image={resource} />;
           default:
             // don't know how to process anything else, yet.
             return null;
@@ -131,10 +117,7 @@ export const pageQuery = graphql`
           __typename
           contentful_id
           ... on ContentfulPostImage {
-            image {
-              gatsbyImageData(height: 400)
-              description
-            }
+            ...PostImage
           }
         }
       }

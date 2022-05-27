@@ -36,5 +36,6 @@ module.exports = {
             : "preview.contentful.com",
       },
     },
+    "gatsby-plugin-extract-schema",
   ],
 };
