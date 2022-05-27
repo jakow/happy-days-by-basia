@@ -13,7 +13,7 @@ import {
   documentToReactComponents,
   Options,
 } from "@contentful/rich-text-react-renderer";
-
+import nullthrows from "../utils/nullthrows";
 import {
   BLOCKS,
   INLINES,
@@ -51,15 +51,15 @@ type Props = {
 };
 
 export default function BlogPost({ data }: Props): React.ReactElement {
-  const post = data!.contentfulBlogPost;
-
-  const { coverImage, body, title, dateCreated } = post;
+  const { coverImage, body, title, dateCreated } = nullthrows(
+    data.contentfulBlogPost
+  );
 
   const rawBody = body?.raw;
   const parsedBody: Document =
     rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
   const references = mapFromValues(
-    post.body.references ?? [],
+    body.references ?? [],
     (r) => r.contentful_id
   );
 
@@ -88,14 +88,17 @@ export default function BlogPost({ data }: Props): React.ReactElement {
   return (
     <Layout headerStyle="immersive">
       <Helmet>
-        <title>{post.title}</title>
+        <title>{title}</title>
       </Helmet>
       <article>
         {coverImage ? (
           <Banner title={title} dateCreated={dateCreated} image={coverImage} />
         ) : null}
-        <div className="prose mx-auto max-w-2xl">
-          {documentToReactComponents(parsedBody, renderOptions)}
+        <div className="p-4 max-w-2xl mx-auto">
+          <div className="prose max-w-full">
+            {documentToReactComponents(parsedBody, renderOptions)}
+            <div className="clear-both" />
+          </div>
         </div>
       </article>
       <div>{/* <code>{rawBody}</code> */}</div>

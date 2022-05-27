@@ -25,7 +25,6 @@ module.exports = {
     {
       resolve: "gatsby-source-contentful",
       options: {
-        spaceId: process.env.CONTENTFUL_SPACE_ID,
         accessToken:
           process.env.NODE_ENV === "production"
             ? process.env.CONTENTFUL_DELIVERY_ACCESS_TOKEN
@@ -34,6 +33,7 @@ module.exports = {
           process.env.NODE_ENV === "production"
             ? "cdn.contentful.com"
             : "preview.contentful.com",
+        spaceId: process.env.CONTENTFUL_SPACE_ID,
       },
     },
     "gatsby-plugin-extract-schema",
