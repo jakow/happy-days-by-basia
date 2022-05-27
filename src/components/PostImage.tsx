@@ -24,9 +24,9 @@ export default function PostImage({
   image: imageData,
   block = false,
 }: PostImageProps): React.ReactElement {
-  const align = imageData.align;
-  const image = getImage(imageData.image as IGatsbyImageDataParent);
+  const align = block ? "center" : imageData.align;
   const isFloat = align !== "center";
+  const image = getImage(imageData.image as IGatsbyImageDataParent);
   const classes = classNames(
     ["block", "my-5"], // 5 => 1.25rem
     isFloat && [

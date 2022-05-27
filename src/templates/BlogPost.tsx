@@ -19,7 +19,7 @@ import {
   INLINES,
   EMPTY_DOCUMENT,
   // AssetLinkBlock,
-  // EntryLinkBlock,
+  EntryLinkBlock,
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
@@ -68,8 +68,16 @@ export default function BlogPost({ data }: Props): React.ReactElement {
       [BLOCKS.EMBEDDED_ASSET]: (): React.ReactNode => {
         return null;
       },
-      [BLOCKS.EMBEDDED_ENTRY]: (): React.ReactNode => {
-        return null;
+      [BLOCKS.EMBEDDED_ENTRY]: (node): React.ReactNode => {
+        const nodeTyped = node as EntryLinkBlock;
+        const resource = references.get(nodeTyped.data.target.sys.id);
+        switch (resource.__typename) {
+          case "ContentfulPostImage":
+            return <PostImage block={true} image={resource} />;
+          default:
+            // don't know how to process anything else, yet.
+            return null;
+        }
       },
       [INLINES.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkInline;
