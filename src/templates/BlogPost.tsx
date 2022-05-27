@@ -5,7 +5,6 @@ import { Helmet } from "react-helmet";
 import type {
   BlogPostCoverImageFragment,
   BlogPostQuery,
-  ContentfulImageWithFocalPoint,
   ContentfulPostImage,
 } from "../@types/generated";
 import type { Document } from "@contentful/rich-text-types";
@@ -50,10 +49,10 @@ function Banner({
   title,
 }: BannerProps): React.ReactElement {
   return (
-    <div className="relative">
+    <div className="relative max-w-screen-2xl mx-auto">
       <div className="absolute w-full z-10 bottom-32">
-        <div className="max-w-2xl px-8 mx-auto">
-          <h1>{title}</h1>
+        <div className="max-w-2xl px-6 mx-auto">
+          <h1 className="font-serif text-white text-5xl text-ivory">{title}</h1>
         </div>
       </div>
       <BlogPostCoverImage image={image} />

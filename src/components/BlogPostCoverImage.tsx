@@ -11,9 +11,9 @@ export const query = graphql`
     image {
       gatsbyImageData(
         placeholder: BLURRED
-        formats: [AUTO, WEBP, AVIF]
         layout: FULL_WIDTH
         aspectRatio: 0.56
+        breakpoints: [640, 768, 1024, 1280, 1536, 1920]
       )
     }
     focalPoint {
@@ -38,7 +38,7 @@ export default function BlogPostCoverImage({
     <GatsbyImage
       alt={image.title}
       image={imageData}
-      className="blog-post-image"
+      className="max-h-[80vh] lg:h-[56vw] 2xl:w-[1536px] 2xl:rounded-lg"
     />
   );
 }
