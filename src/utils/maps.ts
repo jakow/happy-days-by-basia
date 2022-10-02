@@ -1,4 +1,3 @@
-
 export function mapFromValues<K, V>(
   values: Iterable<V>,
   keyFunc: (value: V) => K

@@ -2,6 +2,7 @@ import * as React from "react";
 import Layout from "../components/layout";
 import { graphql } from "gatsby";
 import { Helmet } from "react-helmet";
+import color from "tinycolor2";
 import type {
   BlogPostCoverImageFragment,
   BlogPostQuery,
@@ -23,6 +24,7 @@ import {
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
+import { getImage, IGatsbyImageData } from "gatsby-plugin-image";
 
 type BannerProps = {
   image: BlogPostCoverImageFragment;
@@ -46,31 +48,21 @@ function Banner({
   );
 }
 
-type Props = {
-  data: BlogPostQuery;
-};
+type ReferenceList = BlogPostQuery["contentfulBlogPost"]["body"]["references"];
 
-export default function BlogPost({ data }: Props): React.ReactElement {
-  const { coverImage, body, title, dateCreated } = nullthrows(
-    data.contentfulBlogPost
-  );
-
-  const rawBody = body?.raw;
-  const parsedBody: Document =
-    rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
-  const references = mapFromValues(
-    body.references ?? [],
+function getRichTextRenderOptions(referenceList: ReferenceList): Options {
+  const referenceMap = mapFromValues(
+    referenceList ?? [],
     (r) => r.contentful_id
   );
-
-  const renderOptions: Options = {
+  return {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: (): React.ReactNode => {
         return null;
       },
       [BLOCKS.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkBlock;
-        const resource = references.get(nodeTyped.data.target.sys.id);
+        const resource = referenceMap.get(nodeTyped.data.target.sys.id);
         switch (resource.__typename) {
           case "ContentfulPostImage":
             return <PostImage block={true} image={resource} />;
@@ -81,7 +73,7 @@ export default function BlogPost({ data }: Props): React.ReactElement {
       },
       [INLINES.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkInline;
-        const resource = references.get(nodeTyped.data.target.sys.id);
+        const resource = referenceMap.get(nodeTyped.data.target.sys.id);
         switch (resource.__typename) {
           case "ContentfulPostImage":
             return <PostImage image={resource} />;
@@ -92,6 +84,34 @@ export default function BlogPost({ data }: Props): React.ReactElement {
       },
     },
   };
+}
+
+function shouldUseLightHeader(image: IGatsbyImageData) {
+  const colorHex = image.backgroundColor;
+  if (color == null) {
+    // We could not get the color. We should... probably use the light header?
+    return true;
+  }
+  const parsedColor = color(colorHex);
+  return parsedColor.isDark();
+}
+
+type Props = {
+  data: BlogPostQuery;
+};
+
+export default function BlogPost({ data }: Props): React.ReactElement {
+  const { coverImage, body, title, dateCreated } = nullthrows(
+    data.contentfulBlogPost
+  );
+
+  const useLightHeader = shouldUseLightHeader(
+    getImage(coverImage.image.imageDataForHeader)
+  );
+
+  const rawBody = body?.raw;
+  const parsedBody: Document =
+    rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
 
   return (
     <Layout headerStyle="immersive">
@@ -104,7 +124,10 @@ export default function BlogPost({ data }: Props): React.ReactElement {
         ) : null}
         <div className="p-4 max-w-2xl mx-auto">
           <div className="prose max-w-full">
-            {documentToReactComponents(parsedBody, renderOptions)}
+            {documentToReactComponents(
+              parsedBody,
+              getRichTextRenderOptions(body.references ?? [])
+            )}
             <div className="clear-both" />
           </div>
         </div>
@@ -119,6 +142,9 @@ export const pageQuery = graphql`
     contentfulBlogPost(id: { eq: $id }) {
       title
       coverImage {
+        image {
+          imageDataForHeader: gatsbyImageData(placeholder: DOMINANT_COLOR)
+        }
         ...BlogPostCoverImage
       }
       dateCreated

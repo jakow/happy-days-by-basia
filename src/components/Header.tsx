@@ -1,5 +1,6 @@
 import * as React from "react";
-import logo from "../images/basia-logo-black.svg";
+import logoBlack from "../images/basia-logo-black.svg";
+import logoWhite from "../images/basia-logo-white.svg";
 import tiktokLogo from "../images/social/tiktok-black.svg";
 import igLogo from "../images/social/ig-black.svg";
 
@@ -14,14 +15,14 @@ type SocialInfo = {
 
 const social: Array<SocialInfo> = [
   {
-    name: "@basia.music on TikTok",
     icon: tiktokLogo,
     link: "https://www.tiktok.com/@basia.music",
+    name: "@basia.music on TikTok",
   },
   {
-    name: "@baga.music on Instagram",
     icon: igLogo,
     link: "https://www.instagram.com/baga.music/",
+    name: "@baga.music on Instagram",
   },
 ];
 
@@ -79,7 +80,7 @@ type Props = {
    * If "immersive" style is used, this controls whether the
    * header materialises with background.
    */
-  immersion?: boolean;
+  immersive?: boolean;
 };
 
 export default function Header(props: Props): React.ReactElement {
@@ -87,8 +88,8 @@ export default function Header(props: Props): React.ReactElement {
   if (props.headerStyle === "immersive") {
     styleClasses = {
       absolute: true,
+      "bg-ivory": props.immersive,
       "z-50": true,
-      "bg-ivory": props.immersion,
     };
   } else {
     styleClasses = { relative: true };
@@ -102,7 +103,7 @@ export default function Header(props: Props): React.ReactElement {
             <img
               height={32}
               width={140}
-              src={logo}
+              src={logoBlack}
               alt="Happy Days By Basia"
               className="h-8"
             />

@@ -6274,6 +6274,7 @@ export type BlogPostQuery = {
       image?: {
         __typename?: "ContentfulAsset";
         gatsbyImageData?: any | null;
+        imageDataForHeader?: any | null;
       } | null;
       focalPoint?: {
         __typename?: "contentfulImageWithFocalPointFocalPointJsonNode";
