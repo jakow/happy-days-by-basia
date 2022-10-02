@@ -11,9 +11,9 @@ module.exports = {
       yellow: "#F9F1E8",
     },
     fontFamily: {
-      display: ["Playfair Display", "serif"],
-      sans: ["PT Sans", "sans-serif"],
-      serif: ["Source Serif Pro", "serif"],
+      display: ["'Playfair Display'", "serif"],
+      sans: ["'PT Sans'", "sans-serif"],
+      serif: ["'PT Serif'", "serif"],
     },
   },
 };

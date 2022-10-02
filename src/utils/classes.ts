@@ -6,16 +6,18 @@ export type ClassLike =
   | { [key: string]: Booleanish }
   | null;
 
-export default function classes(...classlikes: ClassLike[]): string | null {
+export default function classes(
+  ...classlikes: ClassLike[]
+): string | undefined {
   if (classlikes.length == 0) {
-    return null;
+    return undefined;
   }
   const classlist: string[] = [];
 
   for (const classlike of classlikes) {
     expand(classlist, classlike);
   }
-  return classlist.length > 0 ? classlist.join(" ") : null;
+  return classlist.length > 0 ? classlist.join(" ") : undefined;
 }
 
 function expand(accumulator: string[], classlike: ClassLike): void {
@@ -30,10 +32,10 @@ function expand(accumulator: string[], classlike: ClassLike): void {
         accumulator.push(classish);
       }
     }
-  } else if (typeof classlike === 'object') {
-    for (const [class, condition] of Object.entries(classlike)) {
-      if (!!condition) {
-        accumulator.push(class)
+  } else if (typeof classlike === "object") {
+    for (const [className, condition] of Object.entries(classlike)) {
+      if (condition) {
+        accumulator.push(className);
       }
     }
   }

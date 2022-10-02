@@ -25,13 +25,40 @@ import {
 } from "@contentful/rich-text-types";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
 import { getImage, IGatsbyImageData } from "gatsby-plugin-image";
+import classes from "../utils/classes";
+
+const UPPER_ROW_FONTS = "font-sans font-semibold text-ivory";
+function DateCreated({ date }: { date: Date }): React.ReactElement {
+  const dateString = date.toISOString().substring(0, 10);
+  return (
+    <time dateTime={dateString} className={UPPER_ROW_FONTS}>
+      {new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        weekday: "long",
+        year: "numeric",
+      }).format(date)}
+    </time>
+  );
+}
+
+function Author() {
+  return <span className={UPPER_ROW_FONTS}>Basia</span>;
+}
+
+function Separator(): React.ReactElement {
+  return <span className={classes(UPPER_ROW_FONTS, "px-3")}>·</span>;
+}
 
 type BannerProps = {
+  author: string;
   image: BlogPostCoverImageFragment;
   title: string;
   dateCreated: Date;
 };
+
 function Banner({
+  author,
   dateCreated,
   image,
   title,
@@ -40,7 +67,14 @@ function Banner({
     <div className="relative max-w-screen-2xl mx-auto">
       <div className="absolute w-full z-10 bottom-32">
         <div className="max-w-2xl px-6 mx-auto">
-          <h1 className="font-serif text-white text-5xl text-ivory">{title}</h1>
+          <div>
+            <DateCreated date={dateCreated} />
+            <Separator />
+            <Author />
+          </div>
+          <div>
+            <h1 className="font-display text-5xl text-ivory">{title}</h1>
+          </div>
         </div>
       </div>
       <BlogPostCoverImage image={image} />
@@ -101,9 +135,12 @@ type Props = {
 };
 
 export default function BlogPost({ data }: Props): React.ReactElement {
-  const { coverImage, body, title, dateCreated } = nullthrows(
-    data.contentfulBlogPost
-  );
+  const {
+    coverImage,
+    body,
+    title,
+    dateCreated: dateCreatedString,
+  } = nullthrows(data.contentfulBlogPost);
 
   const useLightHeader = shouldUseLightHeader(
     getImage(coverImage.image.imageDataForHeader)
@@ -120,10 +157,14 @@ export default function BlogPost({ data }: Props): React.ReactElement {
       </Helmet>
       <article>
         {coverImage ? (
-          <Banner title={title} dateCreated={dateCreated} image={coverImage} />
+          <Banner
+            title={title}
+            dateCreated={new Date(dateCreatedString)}
+            image={coverImage}
+          />
         ) : null}
         <div className="p-4 max-w-2xl mx-auto">
-          <div className="prose max-w-full">
+          <div className="prose md:prose-lg font-serif max-w-full">
             {documentToReactComponents(
               parsedBody,
               getRichTextRenderOptions(body.references ?? [])
