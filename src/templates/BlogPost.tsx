@@ -3,9 +3,11 @@ import Layout from "../components/layout";
 import { graphql } from "gatsby";
 import { Helmet } from "react-helmet";
 import color from "tinycolor2";
-import type {
+import {
   BlogPostCoverImageFragment,
   BlogPostQuery,
+  ContentfulAsset,
+  ContentfulAssetFieldsEnum,
 } from "../@types/generated";
 import PostImage from "../components/PostImage";
 import type { Document } from "@contentful/rich-text-types";
@@ -15,6 +17,7 @@ import {
   Options,
 } from "@contentful/rich-text-react-renderer";
 import nullthrows from "../utils/nullthrows";
+import filterNulls from "../utils/filterNulls";
 import {
   BLOCKS,
   INLINES,
@@ -24,7 +27,7 @@ import {
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
-import { getImage, IGatsbyImageData } from "gatsby-plugin-image";
+import { IGatsbyImageData } from "gatsby-plugin-image";
 import classes from "../utils/classes";
 
 const UPPER_ROW_FONTS = "font-sans font-semibold text-ivory";
@@ -51,14 +54,12 @@ function Separator(): React.ReactElement {
 }
 
 type BannerProps = {
-  author: string;
   image: BlogPostCoverImageFragment;
   title: string;
   dateCreated: Date;
 };
 
 function Banner({
-  author,
   dateCreated,
   image,
   title,
@@ -81,12 +82,15 @@ function Banner({
     </div>
   );
 }
-
-type ReferenceList = BlogPostQuery["contentfulBlogPost"]["body"]["references"];
+type ReferenceList = NonNullable<
+  NonNullable<
+    NonNullable<BlogPostQuery["contentfulBlogPost"]>["body"]
+  >["references"]
+>;
 
 function getRichTextRenderOptions(referenceList: ReferenceList): Options {
   const referenceMap = mapFromValues(
-    referenceList ?? [],
+    filterNulls(referenceList ?? []),
     (r) => r.contentful_id
   );
   return {
@@ -97,7 +101,7 @@ function getRichTextRenderOptions(referenceList: ReferenceList): Options {
       [BLOCKS.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkBlock;
         const resource = referenceMap.get(nodeTyped.data.target.sys.id);
-        switch (resource.__typename) {
+        switch (resource?.__typename) {
           case "ContentfulPostImage":
             return <PostImage block={true} image={resource} />;
           default:
@@ -108,7 +112,7 @@ function getRichTextRenderOptions(referenceList: ReferenceList): Options {
       [INLINES.EMBEDDED_ENTRY]: (node): React.ReactNode => {
         const nodeTyped = node as EntryLinkInline;
         const resource = referenceMap.get(nodeTyped.data.target.sys.id);
-        switch (resource.__typename) {
+        switch (resource?.__typename) {
           case "ContentfulPostImage":
             return <PostImage image={resource} />;
           default:
@@ -138,14 +142,13 @@ export default function BlogPost({ data }: Props): React.ReactElement {
   const {
     coverImage,
     body,
-    title,
+    title: titleNullable,
     dateCreated: dateCreatedString,
   } = nullthrows(data.contentfulBlogPost);
-
-  const useLightHeader = shouldUseLightHeader(
-    getImage(coverImage.image.imageDataForHeader)
+  const title = nullthrows(
+    titleNullable,
+    "This is set as required in Contentful"
   );
-
   const rawBody = body?.raw;
   const parsedBody: Document =
     rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
@@ -167,7 +170,7 @@ export default function BlogPost({ data }: Props): React.ReactElement {
           <div className="prose md:prose-lg font-serif max-w-full">
             {documentToReactComponents(
               parsedBody,
-              getRichTextRenderOptions(body.references ?? [])
+              getRichTextRenderOptions(body?.references ?? [])
             )}
             <div className="clear-both" />
           </div>
@@ -181,14 +184,6 @@ export default function BlogPost({ data }: Props): React.ReactElement {
 export const pageQuery = graphql`
   query BlogPost($id: String) {
     contentfulBlogPost(id: { eq: $id }) {
-      title
-      coverImage {
-        image {
-          imageDataForHeader: gatsbyImageData(placeholder: DOMINANT_COLOR)
-        }
-        ...BlogPostCoverImage
-      }
-      dateCreated
       body {
         raw
         references {
@@ -199,7 +194,16 @@ export const pageQuery = graphql`
           }
         }
       }
+      coverImage {
+        image {
+          imageDataForHeader: gatsbyImageData(placeholder: DOMINANT_COLOR)
+        }
+        ...BlogPostCoverImage
+      }
+      dateCreated
+      locationName
       slug
+      title
     }
   }
 `;

@@ -32,11 +32,13 @@ type Props = {
 export default function BlogPostCoverImage({
   image,
 }: Props): React.ReactElement {
-  const imageData = getImage(image.image.gatsbyImageData as IGatsbyImageData);
-
+  const imageData = getImage(image?.image?.gatsbyImageData as IGatsbyImageData);
+  if (imageData == null) {
+    return <React.Fragment />;
+  }
   return (
     <GatsbyImage
-      alt={image.title}
+      alt={image?.title ?? "Cover image"}
       image={imageData}
       className="max-h-[80vh] lg:h-[56vw] 2xl:w-[1536px] 2xl:rounded-lg"
     />

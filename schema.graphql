@@ -996,6 +996,8 @@ type ContentfulBlogPost implements ContentfulReference & ContentfulEntry & Node 
     locale: String
   ): Date
   body: ContentfulBlogPostBody
+  locationName: String
+  location: ContentfulBlogPostLocation
   coverImage: ContentfulImageWithFocalPoint
   spaceId: String
   createdAt(
@@ -1033,6 +1035,11 @@ type ContentfulBlogPost implements ContentfulReference & ContentfulEntry & Node 
 type ContentfulBlogPostBody {
   raw: String
   references: [ContentfulPostImage]
+}
+
+type ContentfulBlogPostLocation {
+  lon: Float
+  lat: Float
 }
 
 type ContentfulBlogPostSys {
@@ -1165,7 +1172,7 @@ type Query {
   allContentfulImageWithFocalPoint(filter: ContentfulImageWithFocalPointFilterInput, sort: ContentfulImageWithFocalPointSortInput, skip: Int, limit: Int): ContentfulImageWithFocalPointConnection!
   contentfulAuthor(contentful_id: StringQueryOperatorInput, id: StringQueryOperatorInput, node_locale: StringQueryOperatorInput, fullName: StringQueryOperatorInput, photo: ContentfulAssetFilterInput, spaceId: StringQueryOperatorInput, createdAt: DateQueryOperatorInput, updatedAt: DateQueryOperatorInput, sys: ContentfulAuthorSysFilterInput, parent: NodeFilterInput, children: NodeFilterListInput, internal: InternalFilterInput): ContentfulAuthor
   allContentfulAuthor(filter: ContentfulAuthorFilterInput, sort: ContentfulAuthorSortInput, skip: Int, limit: Int): ContentfulAuthorConnection!
-  contentfulBlogPost(contentful_id: StringQueryOperatorInput, id: StringQueryOperatorInput, node_locale: StringQueryOperatorInput, title: StringQueryOperatorInput, slug: StringQueryOperatorInput, dateCreated: DateQueryOperatorInput, body: ContentfulBlogPostBodyFilterInput, coverImage: ContentfulImageWithFocalPointFilterInput, spaceId: StringQueryOperatorInput, createdAt: DateQueryOperatorInput, updatedAt: DateQueryOperatorInput, sys: ContentfulBlogPostSysFilterInput, parent: NodeFilterInput, children: NodeFilterListInput, internal: InternalFilterInput): ContentfulBlogPost
+  contentfulBlogPost(contentful_id: StringQueryOperatorInput, id: StringQueryOperatorInput, node_locale: StringQueryOperatorInput, title: StringQueryOperatorInput, slug: StringQueryOperatorInput, dateCreated: DateQueryOperatorInput, body: ContentfulBlogPostBodyFilterInput, locationName: StringQueryOperatorInput, location: ContentfulBlogPostLocationFilterInput, coverImage: ContentfulImageWithFocalPointFilterInput, spaceId: StringQueryOperatorInput, createdAt: DateQueryOperatorInput, updatedAt: DateQueryOperatorInput, sys: ContentfulBlogPostSysFilterInput, parent: NodeFilterInput, children: NodeFilterListInput, internal: InternalFilterInput): ContentfulBlogPost
   allContentfulBlogPost(filter: ContentfulBlogPostFilterInput, sort: ContentfulBlogPostSortInput, skip: Int, limit: Int): ContentfulBlogPostConnection!
   contentfulPostImage(contentful_id: StringQueryOperatorInput, id: StringQueryOperatorInput, node_locale: StringQueryOperatorInput, description: StringQueryOperatorInput, align: StringQueryOperatorInput, image: ContentfulAssetFilterInput, spaceId: StringQueryOperatorInput, createdAt: DateQueryOperatorInput, updatedAt: DateQueryOperatorInput, sys: ContentfulPostImageSysFilterInput, parent: NodeFilterInput, children: NodeFilterListInput, internal: InternalFilterInput): ContentfulPostImage
   allContentfulPostImage(filter: ContentfulPostImageFilterInput, sort: ContentfulPostImageSortInput, skip: Int, limit: Int): ContentfulPostImageConnection!
@@ -3133,6 +3140,8 @@ input ContentfulBlogPostFilterInput {
   slug: StringQueryOperatorInput
   dateCreated: DateQueryOperatorInput
   body: ContentfulBlogPostBodyFilterInput
+  locationName: StringQueryOperatorInput
+  location: ContentfulBlogPostLocationFilterInput
   coverImage: ContentfulImageWithFocalPointFilterInput
   spaceId: StringQueryOperatorInput
   createdAt: DateQueryOperatorInput
@@ -3182,6 +3191,11 @@ input ContentfulPostImageSysContentTypeSysFilterInput {
   type: StringQueryOperatorInput
   linkType: StringQueryOperatorInput
   id: StringQueryOperatorInput
+}
+
+input ContentfulBlogPostLocationFilterInput {
+  lon: FloatQueryOperatorInput
+  lat: FloatQueryOperatorInput
 }
 
 input ContentfulImageWithFocalPointFilterInput {
@@ -3350,6 +3364,9 @@ enum ContentfulImageWithFocalPointFieldsEnum {
   blog_post___body___references___createdAt
   blog_post___body___references___updatedAt
   blog_post___body___references___children
+  blog_post___locationName
+  blog_post___location___lon
+  blog_post___location___lat
   blog_post___coverImage___contentful_id
   blog_post___coverImage___id
   blog_post___coverImage___node_locale
@@ -3371,6 +3388,7 @@ enum ContentfulImageWithFocalPointFieldsEnum {
   blog_post___coverImage___blog_post___title
   blog_post___coverImage___blog_post___slug
   blog_post___coverImage___blog_post___dateCreated
+  blog_post___coverImage___blog_post___locationName
   blog_post___coverImage___blog_post___spaceId
   blog_post___coverImage___blog_post___createdAt
   blog_post___coverImage___blog_post___updatedAt
@@ -3960,6 +3978,9 @@ enum ContentfulBlogPostFieldsEnum {
   body___references___internal___mediaType
   body___references___internal___owner
   body___references___internal___type
+  locationName
+  location___lon
+  location___lat
   coverImage___contentful_id
   coverImage___id
   coverImage___node_locale
@@ -4000,6 +4021,9 @@ enum ContentfulBlogPostFieldsEnum {
   coverImage___blog_post___dateCreated
   coverImage___blog_post___body___raw
   coverImage___blog_post___body___references
+  coverImage___blog_post___locationName
+  coverImage___blog_post___location___lon
+  coverImage___blog_post___location___lat
   coverImage___blog_post___coverImage___contentful_id
   coverImage___blog_post___coverImage___id
   coverImage___blog_post___coverImage___node_locale

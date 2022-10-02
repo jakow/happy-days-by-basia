@@ -677,6 +677,8 @@ export type ContentfulBlogPost = ContentfulEntry &
     dateCreated?: Maybe<Scalars["Date"]>;
     id: Scalars["ID"];
     internal: Internal;
+    location?: Maybe<ContentfulBlogPostLocation>;
+    locationName?: Maybe<Scalars["String"]>;
     node_locale: Scalars["String"];
     parent?: Maybe<Node>;
     slug?: Maybe<Scalars["String"]>;
@@ -864,6 +866,9 @@ export enum ContentfulBlogPostFieldsEnum {
   CoverImageBlogPostInternalMediaType = "coverImage___blog_post___internal___mediaType",
   CoverImageBlogPostInternalOwner = "coverImage___blog_post___internal___owner",
   CoverImageBlogPostInternalType = "coverImage___blog_post___internal___type",
+  CoverImageBlogPostLocationName = "coverImage___blog_post___locationName",
+  CoverImageBlogPostLocationLat = "coverImage___blog_post___location___lat",
+  CoverImageBlogPostLocationLon = "coverImage___blog_post___location___lon",
   CoverImageBlogPostNodeLocale = "coverImage___blog_post___node_locale",
   CoverImageBlogPostParentChildren = "coverImage___blog_post___parent___children",
   CoverImageBlogPostParentId = "coverImage___blog_post___parent___id",
@@ -1009,6 +1014,9 @@ export enum ContentfulBlogPostFieldsEnum {
   InternalMediaType = "internal___mediaType",
   InternalOwner = "internal___owner",
   InternalType = "internal___type",
+  LocationName = "locationName",
+  LocationLat = "location___lat",
+  LocationLon = "location___lon",
   NodeLocale = "node_locale",
   ParentChildren = "parent___children",
   ParentChildrenChildren = "parent___children___children",
@@ -1068,6 +1076,8 @@ export type ContentfulBlogPostFilterInput = {
   dateCreated?: InputMaybe<DateQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   internal?: InputMaybe<InternalFilterInput>;
+  location?: InputMaybe<ContentfulBlogPostLocationFilterInput>;
+  locationName?: InputMaybe<StringQueryOperatorInput>;
   node_locale?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   slug?: InputMaybe<StringQueryOperatorInput>;
@@ -1116,6 +1126,17 @@ export type ContentfulBlogPostGroupConnectionMinArgs = {
 
 export type ContentfulBlogPostGroupConnectionSumArgs = {
   field: ContentfulBlogPostFieldsEnum;
+};
+
+export type ContentfulBlogPostLocation = {
+  __typename?: "ContentfulBlogPostLocation";
+  lat?: Maybe<Scalars["Float"]>;
+  lon?: Maybe<Scalars["Float"]>;
+};
+
+export type ContentfulBlogPostLocationFilterInput = {
+  lat?: InputMaybe<FloatQueryOperatorInput>;
+  lon?: InputMaybe<FloatQueryOperatorInput>;
 };
 
 export type ContentfulBlogPostSortInput = {
@@ -1691,6 +1712,7 @@ export enum ContentfulImageWithFocalPointFieldsEnum {
   BlogPostCoverImageBlogPostCreatedAt = "blog_post___coverImage___blog_post___createdAt",
   BlogPostCoverImageBlogPostDateCreated = "blog_post___coverImage___blog_post___dateCreated",
   BlogPostCoverImageBlogPostId = "blog_post___coverImage___blog_post___id",
+  BlogPostCoverImageBlogPostLocationName = "blog_post___coverImage___blog_post___locationName",
   BlogPostCoverImageBlogPostNodeLocale = "blog_post___coverImage___blog_post___node_locale",
   BlogPostCoverImageBlogPostSlug = "blog_post___coverImage___blog_post___slug",
   BlogPostCoverImageBlogPostSpaceId = "blog_post___coverImage___blog_post___spaceId",
@@ -1746,6 +1768,9 @@ export enum ContentfulImageWithFocalPointFieldsEnum {
   BlogPostInternalMediaType = "blog_post___internal___mediaType",
   BlogPostInternalOwner = "blog_post___internal___owner",
   BlogPostInternalType = "blog_post___internal___type",
+  BlogPostLocationName = "blog_post___locationName",
+  BlogPostLocationLat = "blog_post___location___lat",
+  BlogPostLocationLon = "blog_post___location___lon",
   BlogPostNodeLocale = "blog_post___node_locale",
   BlogPostParentChildren = "blog_post___parent___children",
   BlogPostParentChildrenChildren = "blog_post___parent___children___children",
@@ -4095,6 +4120,8 @@ export type QueryContentfulBlogPostArgs = {
   dateCreated?: InputMaybe<DateQueryOperatorInput>;
   id?: InputMaybe<StringQueryOperatorInput>;
   internal?: InputMaybe<InternalFilterInput>;
+  location?: InputMaybe<ContentfulBlogPostLocationFilterInput>;
+  locationName?: InputMaybe<StringQueryOperatorInput>;
   node_locale?: InputMaybe<StringQueryOperatorInput>;
   parent?: InputMaybe<NodeFilterInput>;
   slug?: InputMaybe<StringQueryOperatorInput>;
@@ -5892,9 +5919,24 @@ export type BlogPostQuery = {
   __typename?: "Query";
   contentfulBlogPost?: {
     __typename?: "ContentfulBlogPost";
-    title?: string | null;
     dateCreated?: any | null;
+    locationName?: string | null;
     slug?: string | null;
+    title?: string | null;
+    body?: {
+      __typename?: "ContentfulBlogPostBody";
+      raw?: string | null;
+      references?: Array<{
+        __typename: "ContentfulPostImage";
+        contentful_id: string;
+        align?: string | null;
+        image?: {
+          __typename?: "ContentfulAsset";
+          gatsbyImageData?: any | null;
+          description?: string | null;
+        } | null;
+      } | null> | null;
+    } | null;
     coverImage?: {
       __typename?: "ContentfulImageWithFocalPoint";
       id: string;
@@ -5912,20 +5954,6 @@ export type BlogPostQuery = {
           y?: number | null;
         } | null;
       } | null;
-    } | null;
-    body?: {
-      __typename?: "ContentfulBlogPostBody";
-      raw?: string | null;
-      references?: Array<{
-        __typename: "ContentfulPostImage";
-        contentful_id: string;
-        align?: string | null;
-        image?: {
-          __typename?: "ContentfulAsset";
-          gatsbyImageData?: any | null;
-          description?: string | null;
-        } | null;
-      } | null> | null;
     } | null;
   } | null;
 };
