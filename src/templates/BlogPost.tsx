@@ -2,15 +2,9 @@ import * as React from "react";
 import Layout from "../components/layout";
 import { graphql } from "gatsby";
 import { Helmet } from "react-helmet";
-import color from "tinycolor2";
-import {
-  BlogPostCoverImageFragment,
-  BlogPostQuery,
-  ContentfulAsset,
-  ContentfulAssetFieldsEnum,
-} from "../@types/generated";
+import { BlogPostCoverImageFragment, BlogPostQuery } from "../@types/generated";
 import PostImage from "../components/PostImage";
-import type { Document } from "@contentful/rich-text-types";
+import type { Block, Document, Node, Text } from "@contentful/rich-text-types";
 import { mapFromValues } from "../utils/maps";
 import {
   documentToReactComponents,
@@ -27,54 +21,113 @@ import {
   EntryLinkInline,
 } from "@contentful/rich-text-types";
 import BlogPostCoverImage from "../components/BlogPostCoverImage";
-import { IGatsbyImageData } from "gatsby-plugin-image";
 import classes from "../utils/classes";
+import countIf from "../utils/countIf";
+import countWords from "../utils/countWords";
 
-const UPPER_ROW_FONTS = "font-sans font-semibold text-ivory";
-function DateCreated({ date }: { date: Date }): React.ReactElement {
-  const dateString = date.toISOString().substring(0, 10);
+const DATE_FORMAT = new Intl.DateTimeFormat("en-GB", {
+  day: "numeric",
+  month: "long",
+  weekday: "long",
+  year: "numeric",
+});
+
+const WORDS_PER_MINUTE = 200.0;
+
+function UpperSub({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string | null | undefined;
+}) {
   return (
-    <time dateTime={dateString} className={UPPER_ROW_FONTS}>
-      {new Intl.DateTimeFormat("en-GB", {
-        day: "numeric",
-        month: "long",
-        weekday: "long",
-        year: "numeric",
-      }).format(date)}
-    </time>
+    <span className={classes("font-sans font-semibold text-ivory", className)}>
+      {children}
+    </span>
   );
 }
 
-function Author() {
-  return <span className={UPPER_ROW_FONTS}>Basia</span>;
+function LowerSub({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string | null | undefined;
+}) {
+  return (
+    <span className={classes("font-sans font-normal text-ivory", className)}>
+      {children}
+    </span>
+  );
+}
+
+function DateCreated({ date }: { date: Date }): React.ReactElement {
+  const dateString = date.toISOString().substring(0, 10);
+  return (
+    <UpperSub>
+      <time dateTime={dateString}>{DATE_FORMAT.format(date)}</time>
+    </UpperSub>
+  );
 }
 
 function Separator(): React.ReactElement {
-  return <span className={classes(UPPER_ROW_FONTS, "px-3")}>·</span>;
+  return <UpperSub className="px-3">·</UpperSub>;
 }
 
 type BannerProps = {
   image: BlogPostCoverImageFragment;
   title: string;
   dateCreated: Date;
+  locationName: string | null | undefined;
+  photosCount: number;
+  readingTimeMins: number;
 };
 
 function Banner({
   dateCreated,
   image,
   title,
+  locationName,
+  photosCount,
+  readingTimeMins,
 }: BannerProps): React.ReactElement {
+  const readTimeFullMins = Math.ceil(readingTimeMins);
   return (
     <div className="relative max-w-screen-2xl mx-auto">
-      <div className="absolute w-full z-10 bottom-32">
-        <div className="max-w-2xl px-6 mx-auto">
+      <div className="absolute w-full z-10 bottom-0">
+        <div className="max-w-2xl px-6 mx-auto mt-16 pt-8 mb-16 md:mb-32">
           <div>
             <DateCreated date={dateCreated} />
             <Separator />
-            <Author />
+            <UpperSub>Basia</UpperSub>
+            {locationName && (
+              <>
+                <Separator />
+                <UpperSub>{locationName}</UpperSub>
+              </>
+            )}
           </div>
           <div>
-            <h1 className="font-display text-5xl text-ivory">{title}</h1>
+            <h1 className="font-display text-5xl text-ivory mt-2 mb-3">
+              {title}
+            </h1>
+          </div>
+          <div>
+            {photosCount && (
+              <>
+                <LowerSub>
+                  {readTimeFullMins.toFixed(0)}{" "}
+                  {readTimeFullMins == 1 ? "min" : "mins"} reading time
+                </LowerSub>
+                <Separator />
+                <LowerSub>
+                  {photosCount === 1
+                    ? "1 photo"
+                    : `${photosCount.toFixed(0)} photos`}
+                </LowerSub>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -124,14 +177,24 @@ function getRichTextRenderOptions(referenceList: ReferenceList): Options {
   };
 }
 
-function shouldUseLightHeader(image: IGatsbyImageData) {
-  const colorHex = image.backgroundColor;
-  if (color == null) {
-    // We could not get the color. We should... probably use the light header?
-    return true;
+function countWordsInNode(node: Node): number {
+  if (node.nodeType === "text") {
+    return countWords((node as Text).value);
+  } else if ("content" in node) {
+    let count = 0;
+    for (const child of (node as Block).content) {
+      count += countWordsInNode(child);
+      return count;
+    }
   }
-  const parsedColor = color(colorHex);
-  return parsedColor.isDark();
+  return 0;
+}
+function countWordsInBody(body: Document): number {
+  let count = 0;
+  for (const node of body.content) {
+    count += countWordsInNode(node);
+  }
+  return count;
 }
 
 type Props = {
@@ -140,10 +203,11 @@ type Props = {
 
 export default function BlogPost({ data }: Props): React.ReactElement {
   const {
-    coverImage,
     body,
-    title: titleNullable,
+    coverImage,
+    locationName,
     dateCreated: dateCreatedString,
+    title: titleNullable,
   } = nullthrows(data.contentfulBlogPost);
   const title = nullthrows(
     titleNullable,
@@ -152,6 +216,13 @@ export default function BlogPost({ data }: Props): React.ReactElement {
   const rawBody = body?.raw;
   const parsedBody: Document =
     rawBody != null ? JSON.parse(rawBody) : EMPTY_DOCUMENT;
+
+  const photosCount = countIf(
+    body?.references ?? [],
+    (ref) => ref?.__typename === "ContentfulPostImage"
+  );
+
+  const wordCount = countWordsInBody(parsedBody);
 
   return (
     <Layout headerStyle="immersive">
@@ -164,6 +235,9 @@ export default function BlogPost({ data }: Props): React.ReactElement {
             title={title}
             dateCreated={new Date(dateCreatedString)}
             image={coverImage}
+            locationName={locationName}
+            photosCount={photosCount}
+            readingTimeMins={wordCount / WORDS_PER_MINUTE}
           />
         ) : null}
         <div className="p-4 max-w-2xl mx-auto">
@@ -176,7 +250,6 @@ export default function BlogPost({ data }: Props): React.ReactElement {
           </div>
         </div>
       </article>
-      <div>{/* <code>{rawBody}</code> */}</div>
     </Layout>
   );
 }

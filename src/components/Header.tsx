@@ -75,7 +75,7 @@ function SocialLink({ name, icon, link }: SocialInfo): React.ReactElement {
 export type HeaderStyle = "default" | "immersive";
 
 type Props = {
-  headerStyle?: HeaderStyle;
+  headerStyle?: HeaderStyle | null;
   /**
    * If "immersive" style is used, this controls whether the
    * header materialises with background.
@@ -88,7 +88,7 @@ export default function Header(props: Props): React.ReactElement {
   if (props.headerStyle === "immersive") {
     styleClasses = {
       absolute: true,
-      "bg-ivory": props.immersive,
+      "bg-ivory": props?.immersive ?? false,
       "z-50": true,
     };
   } else {
